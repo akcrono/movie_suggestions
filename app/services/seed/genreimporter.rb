@@ -4,7 +4,7 @@ require 'pry'
 class GenreImporter
   attr_reader :file, :options
 
-  def initialize(file, options={})
+  def initialize(file, options = {})
     @file = file
     @options = default_options.merge(options)
   end
@@ -16,7 +16,6 @@ class GenreImporter
   end
 
   def create_genre(attributes)
-
     genre = Genre.find_by id: attributes[:id]
 
     if genre.nil?

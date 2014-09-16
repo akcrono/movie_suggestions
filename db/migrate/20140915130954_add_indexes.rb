@@ -4,6 +4,5 @@ class AddIndexes < ActiveRecord::Migration
     add_index :reviews, :movie_id
     add_index :genre_movies, :movie_id
     add_index :genre_movies, :genre_id
-
   end
 end

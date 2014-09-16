@@ -3,23 +3,22 @@ require 'pry'
 # encoding: UTF-8
 
 class MovieImporter
-
   attr_reader :file, :options
 
-  def initialize(file, options={})
+  def initialize(file, options = {})
     @file = file
     @options = default_options.merge(options)
   end
 
   def import
-    puts file
+    puts "movies started"
     CSV.foreach(file, options) do |row|
       create_movie(row)
     end
+    puts "movies complete"
   end
 
   def create_movie(attributes)
-
     movie = Movie.find_by id: attributes[:id]
 
     if movie.nil?
@@ -40,8 +39,9 @@ class MovieImporter
   def create_genre_movie(attributes)
     attributes.each do |k, v|
       if v == "1" && k != :id
-        subs = {"Scifi" => "Sci-Fi", "Filmnoir" => "Film-Noir"}
+        subs = { "Scifi" => "Sci-Fi", "Filmnoir" => "Film-Noir" }
         k = k.to_s.capitalize
+
         subs.each do |error, sub|
           if k == error
             k = sub
@@ -49,22 +49,23 @@ class MovieImporter
         end
 
         genre_id = (Genre.find_by name: k.to_s)
-        binding.pry if genre_id.nil?
-        temp = GenreMovie.find_or_initialize_by(movie_id: attributes[:id], genre_id: genre_id.id)
+        temp = GenreMovie.find_or_initialize_by(movie_id: attributes[:id],
+                                                genre_id: genre_id.id)
         temp.save
       end
     end
-
   end
 
   def calculate_average_rating(movie_id)
     rating_sum = 0
     ratings = Review.where(movie_id: movie_id)
-    ratings.each {|x| rating_sum += x.rating }
+    ratings.each { |x| rating_sum += x.rating }
     rating_sum.to_f / ratings.count
   end
 
   def default_options
-    { header_converters: :symbol, headers: true, col_sep: '|', encoding: "ISO8859-1" }
+    { header_converters: :symbol,
+      headers: true, col_sep: '|',
+      encoding: "ISO8859-1" }
   end
 end

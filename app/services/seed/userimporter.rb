@@ -4,7 +4,7 @@ require 'pry'
 class UserImporter
   attr_reader :file, :options
 
-  def initialize(file, options={})
+  def initialize(file, options = {})
     @file = file
     @options = default_options.merge(options)
   end
@@ -13,10 +13,10 @@ class UserImporter
     CSV.foreach(file, options) do |row|
       create_user(row)
     end
+    puts "user complete"
   end
 
   def create_user(attributes)
-
     user = User.find_by id: attributes[:id]
 
     if user.nil?
