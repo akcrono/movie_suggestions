@@ -1,0 +1,13 @@
+<h2><%=@movie.title%></h2>
+
+<h4>Rating: <%=sprintf("%.2f", @movie.average_rating)%></h4>
+
+<h4><a href="<%=@movie.imdb_url%>">IMDB</a></h4>
+
+<h3>You might also like:</h3>
+<table><tr><td>title</td><td>average rating</td>
+<%@recommendations.each do |movie| %>
+  <tr><td><a href="/movies/<%= movie[1][:movie_id] %>"><%=movie[0]%></a></td>
+  <td style="text-align: right"><%=sprintf("%.2f", Movie.find(movie[1][:movie_id]).average_rating)%></td></tr>
+
+<%end%></table>

@@ -1,0 +1,14 @@
+<h3> Search Results: </h3>
+<table><tr><td>Title</td><td>Average rating</td></tr>
+<%@movies.each do |movie| %>
+  <tr><td><a href="/movies/<%= movie.id %>"><%=movie.title%></a></td><td style="text-align: right"><%=sprintf("%.2f", movie.average_rating)%></td></tr>
+
+<%end%></table>
+<div style="width:25%">
+  <% if @page_number != 1 %>
+    <a href="/search?search_results=<%=@search_results%>&page=<%= @page_number.to_i - 1%>"> Previous </a>
+    <% end %>
+  <% if Movie.paginate_search(@search, @page_number + 1) != []%>
+    <a style="margin-left:200px" href="/search?search_results=<%=@search_results%>&page=<%= @page_number.to_i + 1%>"> Next </a>
+  <% end %>
+</div>
