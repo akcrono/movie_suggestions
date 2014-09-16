@@ -16,13 +16,8 @@ class GenreImporter
   end
 
   def create_genre(attributes)
-    genre = Genre.find_by id: attributes[:id]
-
-    if genre.nil?
-      genre = Genre.new(id: attributes[:id], name: attributes[:name])
-    else
-      genre.name = attributes[:name]
-    end
+    genre = Genre.find_or_initialize_by id: attributes[:id]
+    genre.name = attributes[:name]
     genre.save
   end
 

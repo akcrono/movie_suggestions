@@ -19,11 +19,7 @@ class MovieImporter
   end
 
   def create_movie(attributes)
-    movie = Movie.find_by id: attributes[:id]
-
-    if movie.nil?
-      movie = Movie.new(id: attributes[:id])
-    end
+    movie = Movie.find_or_initialize_by id: attributes[:id]
 
     movie.release_date = attributes[:release_date]
     movie.imdb_url = attributes[:imdb_url]

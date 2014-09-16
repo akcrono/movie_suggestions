@@ -17,11 +17,8 @@ class UserImporter
   end
 
   def create_user(attributes)
-    user = User.find_by id: attributes[:id]
+    user = User.find_or_initialize_by id: attributes[:id]
 
-    if user.nil?
-      user = User.new(id: attributes[:id])
-    end
     user.age = attributes[:name]
     user.gender = attributes[:gender]
     user.occupation = attributes[:occupation]

@@ -8,7 +8,7 @@
   <% if @page_number != 1 %>
     <a href="/search?search_results=<%=@search_results%>&page=<%= @page_number.to_i - 1%>"> Previous </a>
     <% end %>
-  <% if Movie.where("title ILIKE ?", @search).limit(20).offset((@page_number)*20) != []%>
+  <% if Movie.paginate_search(@search, @page_number + 1) != []%>
     <a style="margin-left:200px" href="/search?search_results=<%=@search_results%>&page=<%= @page_number.to_i + 1%>"> Next </a>
   <% end %>
 </div>
