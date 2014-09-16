@@ -14,7 +14,9 @@ class ReviewImporter
     CSV.foreach(file, options) do |row|
       create_review(row)
       count += 1
-      puts "#{count}"
+      if count % 1000 == 0
+        puts "#{count}"
+      end
     end
   end
 

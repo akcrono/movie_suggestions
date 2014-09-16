@@ -1,6 +1,16 @@
 <h1>Movie list!</h1>
 
-<ul><%@movies.each do |movie| %>
-  <li><%=movie.name%></li>
+<table><tr><td>Title</td><td>Average rating</td></tr>
+<%@movies.each do |movie| %>
+  <tr><td><a href="/movies/<%= movie.id %>"><%=movie.title%></a></td><td style="text-align: right"><%=sprintf("%.2f", movie.average_rating)%></td></tr>
 
-<%end%></ul>
+<%end%></table>
+
+<div style="width:25%">
+<% if @page_number != 1 %>
+  <a href="/?page=<%= @page_number.to_i - 1%>"> Previous </a>
+  <% end %>
+  <% if Movie.all.limit(20).offset((@page_number)*20) != []%>
+  <a style="margin-left:200px" href="/?page=<%= @page_number.to_i + 1%>"> Next </a>
+  <% end %>
+</div>

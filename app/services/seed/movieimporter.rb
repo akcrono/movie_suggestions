@@ -14,9 +14,7 @@ class MovieImporter
   def import
     puts file
     CSV.foreach(file, options) do |row|
-      puts "#{row[:title]}"
       create_movie(row)
-      puts 'done'
     end
   end
 
@@ -31,6 +29,7 @@ class MovieImporter
     movie.release_date = attributes[:release_date]
     movie.imdb_url = attributes[:imdb_url]
     movie.title = attributes[:title].gsub(/ \(\d\d\d\d\)/, '').encode('utf-8')
+    movie.average_rating = calculate_average_rating(attributes[:id])
     create_genre_movie(attributes)
 
     movie.save
@@ -41,12 +40,9 @@ class MovieImporter
   def create_genre_movie(attributes)
     attributes.each do |k, v|
       if v == "1" && k != :id
-        puts "#{k}, #{v}"
         subs = {"Scifi" => "Sci-Fi", "Filmnoir" => "Film-Noir"}
         k = k.to_s.capitalize
         subs.each do |error, sub|
-          puts k
-          puts error
           if k == error
             k = sub
           end
@@ -59,6 +55,13 @@ class MovieImporter
       end
     end
 
+  end
+
+  def calculate_average_rating(movie_id)
+    rating_sum = 0
+    ratings = Review.where(movie_id: movie_id)
+    ratings.each {|x| rating_sum += x.rating }
+    rating_sum.to_f / ratings.count
   end
 
   def default_options
